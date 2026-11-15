@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Riwayat Deteksi — Somnipathy Lab{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Arsip pribadi</p>
+  <h1>Riwayat deteksi</h1>
+  <p class="muted">
+    Hanya deteksi dari perangkat/browser ini yang ditampilkan. Maksimal 30
+    hasil terakhir.
+  </p>
+</section>
+
+{% if detections %}
+  <div class="history-list">
+    {% for item in detections %}
+      {% set label = schema.target.labels.get(item.prediction, item.prediction) %}
+      <article class="card history-item">
+        <div class="history-main">
+          <h2>{{ label }}</h2>
+          <p class="muted small">{{ item.created_at | tanggal }}</p>
+        </div>
+        <div class="history-confidence">
+          <span class="muted small">Keyakinan</span>
+          <strong>{{ (item.confidence * 100) | round(1) }}%</strong>
+        </div>
+        <div class="history-recs">
+          <span class="muted small">{{ item.recommendations | length }} rekomendasi</span>
+        </div>
+        <a class="btn btn--ghost btn--small" href="{{ url_for('web.result_page', detection_id=item.id) }}">
+          Lihat detail
+        </a>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card empty-state">
+    <h2>Belum ada riwayat</h2>
+    <p class="muted">Setelah Anda menyelesaikan deteksi pertama, hasilnya akan muncul di sini.</p>
+    <a class="btn btn--primary" href="{{ url_for('web.detection_page') }}">Mulai deteksi</a>
+  </div>
+{% endif %}
+{% endblock %}

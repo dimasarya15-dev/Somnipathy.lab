@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Halaman Tidak Ditemukan — Somnipathy Lab{% endblock %}
+
+{% block content %}
+<section class="card error-page">
+  <p class="eyebrow">404</p>
+  <h1>Halaman tidak ditemukan</h1>
+  <p class="muted">
+    {{ message or "Alamat yang Anda buka tidak tersedia atau sudah dipindahkan." }}
+  </p>
+  <div class="page-actions">
+    <a class="btn btn--primary" href="{{ url_for('web.index') }}">Kembali ke beranda</a>
+    <a class="btn btn--ghost" href="{{ url_for('web.detection_page') }}">Mulai deteksi</a>
+  </div>
+</section>
+{% endblock %}

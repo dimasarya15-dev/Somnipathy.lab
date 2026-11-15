@@ -1,0 +1,29 @@
+# --- Lingkungan Python ---
+venv/
+.venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# --- Rahasia / konfigurasi lokal ---
+.env
+instance/
+
+# --- Data & artefak Machine Learning ---
+ml/artifacts/*.pkl
+ml/artifacts/*.joblib
+ml/data/raw/*
+ml/data/processed/*
+!ml/artifacts/.gitkeep
+!ml/data/raw/.gitkeep
+!ml/data/processed/.gitkeep
+
+# --- Alat pengembangan ---
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+Thumbs.db
+desktop.ini

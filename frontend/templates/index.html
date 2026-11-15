@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Somnipathy Lab — Deteksi Awal Gangguan Tidur{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Skrining awal berbasis Machine Learning</p>
+    <h1>Kenali pola tidur Anda sebelum menjadi masalah.</h1>
+    <p class="lead">
+      Somnipathy Lab menganalisis data tidur dan kebiasaan harian Anda dengan
+      model klasifikasi, lalu memberi rekomendasi yang disusun dari aturan
+      yang dapat ditelusuri — bukan tebakan model bahasa.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn--primary" href="{{ url_for('web.detection_page') }}">Mulai deteksi</a>
+      <a class="btn btn--ghost" href="{{ url_for('web.about_page') }}">Cara kerja sistem</a>
+    </div>
+    <p class="muted small">
+      Tidak perlu akun. Data Anda tidak ditampilkan ke pengguna lain.
+    </p>
+  </div>
+
+  <aside class="hero-panel card">
+    <h2>Status sistem</h2>
+    <ul class="status-list">
+      <li>
+        <span class="status-dot {{ 'is-ok' if model.ready else 'is-warn' }}"></span>
+        <span>Model klasifikasi</span>
+        <strong>{{ 'Siap' if model.ready else 'Belum tersedia' }}</strong>
+      </li>
+      <li>
+        <span class="status-dot {{ 'is-ok' if schema.status != 'draft' else 'is-warn' }}"></span>
+        <span>Skema fitur</span>
+        <strong>{{ schema.version }}</strong>
+      </li>
+      <li>
+        <span class="status-dot is-ok"></span>
+        <span>Sistem rekomendasi</span>
+        <strong>Aktif (berbasis aturan)</strong>
+      </li>
+    </ul>
+
+    {% if not model.ready %}
+      <p class="alert alert--warning small">
+        Model belum dimuat. Form tetap dapat dibuka, tetapi analisis baru
+        berjalan setelah model dilatih dan diletakkan di
+        <code>ml/artifacts/model_pipeline.pkl</code>.
+      </p>
+    {% endif %}
+
+    {% if schema.status == 'draft' %}
+      <p class="alert alert--info small">
+        Daftar pertanyaan masih berstatus <strong>draft</strong> dan akan
+        disesuaikan dengan dataset final.
+      </p>
+    {% endif %}
+  </aside>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Tiga langkah kerja</h2>
+  <div class="grid-3">
+    <article class="card step-card">
+      <span class="step-number">1</span>
+      <h3>Isi data tidur</h3>
+      <p class="muted">Jawab pertanyaan singkat tentang durasi tidur, kebiasaan, dan kondisi tubuh Anda.</p>
+    </article>
+    <article class="card step-card">
+      <span class="step-number">2</span>
+      <h3>Model menganalisis</h3>
+      <p class="muted">Data diproses model klasifikasi yang sudah dilatih, menghasilkan kelas dan probabilitas.</p>
+    </article>
+    <article class="card step-card">
+      <span class="step-number">3</span>
+      <h3>Rekomendasi aturan</h3>
+      <p class="muted">Sistem memeriksa aturan yang relevan dan menampilkan saran yang bisa Anda telusuri asalnya.</p>
+    </article>
+  </div>
+</section>
+
+<section class="section grid-2">
+  <article class="card">
+    <h2>Yang perlu Anda ketahui</h2>
+    <ul class="check-list">
+      <li>Hasil bersifat <strong>skrining awal</strong>, bukan diagnosis medis.</li>
+      <li>Model Machine Learning menghitung probabilitas tiap kelas gangguan tidur.</li>
+      <li>Rekomendasi berasal dari aturan tertulis, sehingga hasilnya konsisten dan bisa diaudit.</li>
+      <li>Riwayat hanya terlihat pada perangkat/browser yang sama.</li>
+    </ul>
+  </article>
+  <article class="card">
+    <h2>Teknologi di balik layar</h2>
+    <ul class="tech-list">
+      <li><span>Antarmuka</span><strong>HTML, CSS, JavaScript</strong></li>
+      <li><span>Backend</span><strong>Python + Flask</strong></li>
+      <li><span>Machine Learning</span><strong>scikit-learn</strong></li>
+      <li><span>Database</span><strong>MySQL / MariaDB</strong></li>
+      <li><span>Rekomendasi</span><strong>Rule-based (JSON)</strong></li>
+    </ul>
+  </article>
+</section>
+{% endblock %}

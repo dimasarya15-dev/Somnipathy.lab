@@ -1,0 +1,24 @@
+# ============================================================
+# Somnipathy Lab - daftar dependensi Python
+# Pasang dengan:  py -m pip install -r requirements.txt
+# Disarankan Python 3.11 / 3.12 (bukan 3.13-beta) agar
+# scikit-learn dan pandas stabil.
+# ============================================================
+
+# --- Web framework ---
+Flask>=3.0,<4.0
+Flask-SQLAlchemy>=3.1,<4.0
+python-dotenv>=1.0,<2.0
+
+# --- Database ---
+SQLAlchemy>=2.0,<3.0
+PyMySQL>=1.1,<2.0
+
+# --- Machine Learning ---
+scikit-learn>=1.5,<2.0
+pandas>=2.2,<4.0
+numpy>=1.26,<3.0
+joblib>=1.4,<2.0
+
+# --- Pengujian ---
+pytest>=8.0,<10.0

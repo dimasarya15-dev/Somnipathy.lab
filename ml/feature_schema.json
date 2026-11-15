@@ -1,0 +1,130 @@
+{
+  "version": "0.1.0-draft",
+  "status": "draft",
+  "updated_at": "2026-11-15",
+  "notes": "RANCANGAN AWAL. Daftar fitur, satuan, dan kelas di bawah ini BELUM dikonfirmasi terhadap dataset yang akan dipakai. Sesuaikan 'name' dengan nama kolom dataset yang sebenarnya sebelum melatih model. Form di website, validasi input, dan pelatihan model semuanya membaca file ini, jadi perubahan cukup dilakukan di sini.",
+  "target": {
+    "column": "sleep_disorder",
+    "classes": ["None", "Insomnia", "Sleep Apnea"],
+    "labels": {
+      "None": "Tidak terindikasi",
+      "Insomnia": "Insomnia",
+      "Sleep Apnea": "Sleep Apnea"
+    }
+  },
+  "fields": [
+    {
+      "name": "age",
+      "label": "Usia",
+      "type": "integer",
+      "unit": "tahun",
+      "min": 10,
+      "max": 100,
+      "required": true,
+      "help": "Usia Anda saat ini dalam tahun."
+    },
+    {
+      "name": "gender",
+      "label": "Jenis kelamin",
+      "type": "select",
+      "required": true,
+      "options": [
+        { "value": "male", "label": "Laki-laki" },
+        { "value": "female", "label": "Perempuan" }
+      ],
+      "help": "Pilih sesuai data yang Anda ketahui."
+    },
+    {
+      "name": "sleep_duration",
+      "label": "Durasi tidur rata-rata",
+      "type": "float",
+      "unit": "jam",
+      "min": 0,
+      "max": 14,
+      "decimals": 2,
+      "required": true,
+      "help": "Rata-rata lama tidur per malam, misalnya 6.5."
+    },
+    {
+      "name": "sleep_quality",
+      "label": "Kualitas tidur",
+      "type": "integer",
+      "unit": "skala 1-10",
+      "min": 1,
+      "max": 10,
+      "required": true,
+      "help": "1 = sangat buruk, 10 = sangat baik."
+    },
+    {
+      "name": "physical_activity_minutes",
+      "label": "Aktivitas fisik harian",
+      "type": "integer",
+      "unit": "menit",
+      "min": 0,
+      "max": 300,
+      "required": true,
+      "help": "Total waktu berolahraga/bergerak dalam sehari."
+    },
+    {
+      "name": "stress_level",
+      "label": "Tingkat stres",
+      "type": "integer",
+      "unit": "skala 1-10",
+      "min": 1,
+      "max": 10,
+      "required": true,
+      "help": "1 = sangat tenang, 10 = sangat tertekan."
+    },
+    {
+      "name": "bmi",
+      "label": "Indeks massa tubuh (IMT)",
+      "type": "float",
+      "unit": "kg/m2",
+      "min": 10,
+      "max": 60,
+      "decimals": 1,
+      "required": true,
+      "help": "Berat badan (kg) dibagi kuadrat tinggi badan (m)."
+    },
+    {
+      "name": "systolic_bp",
+      "label": "Tekanan darah sistolik",
+      "type": "integer",
+      "unit": "mmHg",
+      "min": 70,
+      "max": 250,
+      "required": true,
+      "help": "Angka atas pada hasil pengukuran tekanan darah."
+    },
+    {
+      "name": "diastolic_bp",
+      "label": "Tekanan darah diastolik",
+      "type": "integer",
+      "unit": "mmHg",
+      "min": 40,
+      "max": 150,
+      "required": true,
+      "help": "Angka bawah pada hasil pengukuran tekanan darah."
+    },
+    {
+      "name": "heart_rate",
+      "label": "Detak jantung saat istirahat",
+      "type": "integer",
+      "unit": "bpm",
+      "min": 30,
+      "max": 200,
+      "required": true,
+      "help": "Denyut per menit saat tubuh dalam kondisi tenang."
+    },
+    {
+      "name": "daily_steps",
+      "label": "Langkah harian",
+      "type": "integer",
+      "unit": "langkah",
+      "min": 0,
+      "max": 50000,
+      "required": true,
+      "help": "Perkiraan jumlah langkah per hari."
+    }
+  ]
+}

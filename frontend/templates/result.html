@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Hasil Analisis — Somnipathy Lab{% endblock %}
+
+{% block content %}
+{% set label = schema.target.labels.get(detection.prediction, detection.prediction) %}
+{% set confidence_pct = (detection.confidence * 100) | round(1) %}
+
+<section class="page-head">
+  <p class="eyebrow">Hasil analisis</p>
+  <h1>{{ label }}</h1>
+  <p class="muted">
+    Dianalisis {{ detection.created_at | tanggal }} &middot;
+    Model <code>{{ detection.model_version }}</code>
+  </p>
+</section>
+
+{% if detection.confidence < threshold %}
+  <div class="alert alert--warning" role="status">
+    <strong>Keyakinan model rendah.</strong>
+    Hasil ini sebaiknya tidak dijadikan dasar keputusan. Lihat rekomendasi
+    "kualitas data" di bawah.
+  </div>
+{% endif %}
+
+<div class="grid-2">
+  <article class="card">
+    <h2>Keyakinan model</h2>
+    <div class="meter" role="img" aria-label="Keyakinan model {{ confidence_pct }} persen">
+      <span style="width: {{ confidence_pct }}%"></span>
+    </div>
+    <p class="meter-value">{{ confidence_pct }}%</p>
+    <p class="muted small">
+      Ambang batas keyakinan sistem: {{ "%.0f" | format(threshold * 100) }}%.
+    </p>
+
+    <h3>Rincian probabilitas</h3>
+    <ul class="prob-list">
+      {% for key, value in detection.probabilities | dictsort(by='value', reverse=true) %}
+        <li>
+          <span class="prob-label">{{ schema.target.labels.get(key, key) }}</span>
+          <span class="prob-bar"><i style="width: {{ (value * 100) | round(1) }}%"></i></span>
+          <strong>{{ (value * 100) | round(1) }}%</strong>
+        </li>
+      {% endfor %}
+    </ul>
+  </article>
+
+  <article class="card">
+    <h2>Data yang dianalisis</h2>
+    <dl class="data-list">
+      {% for row in input_rows %}
+        <div>
+          <dt>{{ row.label }}</dt>
+          <dd>{{ row.value }}{% if row.unit %} <span class="unit">{{ row.unit }}</span>{% endif %}</dd>
+        </div>
+      {% endfor %}
+    </dl>
+  </article>
+</div>
+
+<section class="card">
+  <h2>Rekomendasi untuk Anda</h2>
+  {% if detection.recommendations %}
+    <ul class="rec-list">
+      {% for rec in detection.recommendations %}
+        <li class="rec rec--{{ rec.severity }}">
+          <div class="rec-head">
+            <span class="badge badge--{{ rec.severity }}">{{ severity_label(rec.severity) }}</span>
+            <h3>{{ rec.title }}</h3>
+          </div>
+          <p>{{ rec.message }}</p>
+          <p class="rec-meta">Aturan: <code>{{ rec.rule_id }}</code> &middot; kategori: {{ rec.category }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">Tidak ada aturan rekomendasi yang cocok dengan data ini.</p>
+  {% endif %}
+
+  <p class="disclaimer">
+    <strong>Catatan penting:</strong> hasil ini adalah skrining awal dari model
+    statistik dan aturan tertulis, bukan diagnosis medis. Untuk keluhan tidur
+    yang menetap, konsultasikan kepada dokter atau spesialis tidur.
+  </p>
+</section>
+
+<div class="page-actions">
+  <a class="btn btn--primary" href="{{ url_for('web.detection_page') }}">Deteksi lagi</a>
+  <a class="btn btn--ghost" href="{{ url_for('web.history_page') }}">Lihat riwayat</a>
+</div>
+{% endblock %}

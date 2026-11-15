@@ -1,0 +1,163 @@
+{
+  "version": "0.1.0-draft",
+  "status": "draft",
+  "updated_at": "2026-11-15",
+  "max_recommendations": 5,
+  "disclaimer": "Hasil ini adalah skrining awal berbasis model statistik dan aturan, BUKAN diagnosis medis. Untuk keluhan tidur yang menetap atau mengganggu aktivitas, konsultasikan dengan dokter atau spesialis tidur.",
+  "notes": "Aturan di bawah ini adalah RANCANGAN. Setiap ambang batas perlu ditinjau ulang oleh tenaga kesehatan sebelum website dipakai oleh pengguna nyata. Ubah teks dan ambang di sini tanpa menyentuh kode Python.",
+  "rules": [
+    {
+      "id": "APN-01",
+      "priority": 10,
+      "severity": "high",
+      "category": "medical_referral",
+      "when": {
+        "all": [
+          { "field": "prediction_label", "op": "eq", "value": "Sleep Apnea" },
+          { "field": "is_confident", "op": "eq", "value": true }
+        ]
+      },
+      "title": "Disarankan evaluasi medis",
+      "message": "Pola data Anda mengarah pada indikasi sleep apnea dengan keyakinan model yang memadai. Sleep apnea dapat memengaruhi kualitas tidur dan kesehatan jantung. Sebaiknya konsultasikan ke dokter untuk pemeriksaan lanjutan (misalnya polisomnografi)."
+    },
+    {
+      "id": "APN-02",
+      "priority": 12,
+      "severity": "high",
+      "category": "medical_referral",
+      "when": {
+        "all": [
+          { "field": "prediction_label", "op": "eq", "value": "Sleep Apnea" }
+        ]
+      },
+      "title": "Perlu perhatian pada pola napas saat tidur",
+      "message": "Model mengarah pada indikasi sleep apnea, meskipun tingkat keyakinannya belum tinggi. Catat keluhan seperti mendengkur keras, terbangun dengan napas terengah, atau mengantuk berlebihan di siang hari, lalu diskusikan dengan tenaga kesehatan."
+    },
+    {
+      "id": "INS-01",
+      "priority": 20,
+      "severity": "medium",
+      "category": "insomnia",
+      "when": {
+        "all": [
+          { "field": "prediction_label", "op": "eq", "value": "Insomnia" }
+        ]
+      },
+      "title": "Kelola pola tidur yang tidak teratur",
+      "message": "Model mengarah pada indikasi insomnia. Cobalah menetapkan jam tidur dan jam bangun yang konsisten, hindari layar 30-60 menit sebelum tidur, dan batasi kafein setelah tengah hari. Bila berlangsung lebih dari beberapa minggu, konsultasikan ke tenaga kesehatan."
+    },
+    {
+      "id": "DUR-01",
+      "priority": 30,
+      "severity": "medium",
+      "category": "sleep_duration",
+      "when": {
+        "all": [{ "field": "sleep_duration", "op": "lt", "value": 6 }]
+      },
+      "title": "Durasi tidur kurang dari 6 jam",
+      "message": "Orang dewasa umumnya membutuhkan 7-9 jam tidur per malam. Kurang tidur kronis berkaitan dengan penurunan konsentrasi, suasana hati, dan daya tahan tubuh. Coba majukan waktu tidur 30 menit secara bertahap."
+    },
+    {
+      "id": "DUR-02",
+      "priority": 32,
+      "severity": "low",
+      "category": "sleep_duration",
+      "when": {
+        "all": [{ "field": "sleep_duration", "op": "gt", "value": 9 }]
+      },
+      "title": "Durasi tidur cukup panjang",
+      "message": "Durasi tidur Anda tergolong panjang. Bila tetap merasa lelah setelah tidur lama, hal ini bisa menjadi tanda kualitas tidur yang kurang baik atau kondisi lain. Perhatikan kebiasaan tidur dan konsultasikan bila berlanjut."
+    },
+    {
+      "id": "QUA-01",
+      "priority": 40,
+      "severity": "medium",
+      "category": "sleep_quality",
+      "when": {
+        "all": [{ "field": "sleep_quality", "op": "lte", "value": 4 }]
+      },
+      "title": "Kualitas tidur rendah",
+      "message": "Anda menilai kualitas tidur rendah. Jaga kamar tetap gelap, sejuk, dan tenang; hindari alkohol serta makan berat mendekati waktu tidur; dan usahakan bangun pada jam yang sama setiap hari."
+    },
+    {
+      "id": "BP-01",
+      "priority": 45,
+      "severity": "high",
+      "category": "blood_pressure",
+      "when": {
+        "any": [
+          { "field": "systolic_bp", "op": "gte", "value": 140 },
+          { "field": "diastolic_bp", "op": "gte", "value": 90 }
+        ]
+      },
+      "title": "Tekanan darah tergolong tinggi",
+      "message": "Angka tekanan darah yang Anda masukkan berada pada rentang tinggi. Tekanan darah tinggi sering tanpa gejala dan perlu diperiksa oleh tenaga kesehatan. Kurangi garam, rutin bergerak, dan lakukan pengukuran ulang saat tubuh tenang."
+    },
+    {
+      "id": "STR-01",
+      "priority": 50,
+      "severity": "medium",
+      "category": "stress",
+      "when": {
+        "all": [{ "field": "stress_level", "op": "gte", "value": 7 }]
+      },
+      "title": "Tingkat stres tinggi",
+      "message": "Tingkat stres yang tinggi dapat mengganggu proses tidur. Coba teknik relaksasi seperti pernapasan lambat, menulis jurnal sebelum tidur, atau aktivitas ringan di sore hari. Bila stres terasa berat, pertimbangkan bantuan profesional."
+    },
+    {
+      "id": "BMI-01",
+      "priority": 55,
+      "severity": "medium",
+      "category": "weight",
+      "when": {
+        "all": [{ "field": "bmi", "op": "gte", "value": 30 }]
+      },
+      "title": "Berat badan di atas rentang ideal",
+      "message": "Nilai IMT Anda masuk kategori obesitas. Berat badan berlebih merupakan salah satu faktor risiko gangguan tidur, termasuk sleep apnea. Pengaturan pola makan dan aktivitas fisik teratur sebaiknya dikonsultasikan dengan tenaga kesehatan."
+    },
+    {
+      "id": "ACT-01",
+      "priority": 60,
+      "severity": "low",
+      "category": "activity",
+      "when": {
+        "all": [{ "field": "physical_activity_minutes", "op": "lt", "value": 30 }]
+      },
+      "title": "Aktivitas fisik masih rendah",
+      "message": "Aktivitas fisik harian Anda di bawah 30 menit. Aktivitas ringan seperti jalan cepat dapat membantu kualitas tidur. Usahakan bergerak secara rutin, namun hindari olahraga berat tepat sebelum tidur."
+    },
+    {
+      "id": "STEP-01",
+      "priority": 62,
+      "severity": "low",
+      "category": "daily_steps",
+      "when": {
+        "all": [{ "field": "daily_steps", "op": "lt", "value": 5000 }]
+      },
+      "title": "Jumlah langkah harian rendah",
+      "message": "Jumlah langkah harian yang rendah menandakan aktivitas fisik yang minim. Menambah 1.000-2.000 langkah per hari secara bertahap adalah awal yang baik dan umumnya aman."
+    },
+    {
+      "id": "HR-01",
+      "priority": 65,
+      "severity": "low",
+      "category": "heart_rate",
+      "when": {
+        "all": [{ "field": "heart_rate", "op": "gt", "value": 90 }]
+      },
+      "title": "Detak jantung istirahat relatif tinggi",
+      "message": "Detak jantung istirahat di atas 90 bpm bisa dipengaruhi stres, kafein, kurang tidur, atau kondisi lain. Coba ukur kembali saat benar-benar tenang. Bila tetap tinggi, konsultasikan ke tenaga kesehatan."
+    },
+    {
+      "id": "LOWCONF",
+      "priority": 90,
+      "severity": "info",
+      "category": "data_quality",
+      "when": {
+        "all": [{ "field": "is_confident", "op": "eq", "value": false }]
+      },
+      "title": "Keyakinan model masih rendah",
+      "message": "Model belum cukup yakin dengan hasil ini. Hasil sebaiknya tidak dijadikan dasar keputusan. Lengkapi data dengan pengukuran yang lebih akurat atau ulangi pengisian pada waktu yang berbeda."
+    }
+  ]
+}

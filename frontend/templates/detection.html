@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Deteksi Gangguan Tidur — Somnipathy Lab{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Langkah 1 dari 2</p>
+  <h1>Isi data tidur Anda</h1>
+  <p class="lead">
+    Jawab sejujur mungkin berdasarkan kondisi beberapa minggu terakhir.
+    Semua isian digunakan hanya untuk analisis ini.
+  </p>
+</section>
+
+{% if not model.ready %}
+  <div class="alert alert--warning" role="status">
+    <strong>Model belum tersedia.</strong>
+    Form dapat diisi, tetapi tombol analisis dinonaktifkan sampai model
+    klasifikasi dilatih. Lihat <code>ml/artifacts/README.md</code>.
+  </div>
+{% endif %}
+
+{% if schema.status == 'draft' %}
+  <div class="alert alert--info" role="status">
+    Daftar pertanyaan masih berstatus <strong>draft</strong>. Nama field dan
+    rentang nilai akan disesuaikan dengan dataset final di
+    <code>ml/feature_schema.json</code>.
+  </div>
+{% endif %}
+
+<form id="form-deteksi" class="card form-card" data-model-ready="{{ 'true' if model.ready else 'false' }}" novalidate>
+  <div class="form-grid">
+    {% for field in schema.fields %}
+      <div class="field" data-field="{{ field.name }}">
+        <label for="f-{{ field.name }}">
+          {{ field.label }}
+          {% if field.unit %}<span class="unit">({{ field.unit }})</span>{% endif %}
+          {% if field.required %}<span class="req" aria-hidden="true">*</span>{% endif %}
+        </label>
+
+        {% if field.type == 'select' %}
+          <select id="f-{{ field.name }}" name="{{ field.name }}" data-type="select"
+                  {% if field.required %}required{% endif %}>
+            <option value="">Pilih…</option>
+            {% for option in field.options %}
+              <option value="{{ option.value }}">{{ option.label }}</option>
+            {% endfor %}
+          </select>
+        {% else %}
+          <input
+            id="f-{{ field.name }}"
+            name="{{ field.name }}"
+            type="number"
+            inputmode="decimal"
+            data-type="{{ field.type }}"
+            {% if field.min is defined %}min="{{ field.min }}"{% endif %}
+            {% if field.max is defined %}max="{{ field.max }}"{% endif %}
+            step="{{ field.step if field.step else ('0.01' if field.type == 'float' else '1') }}"
+            {% if field.required %}required{% endif %}
+            autocomplete="off">
+        {% endif %}
+
+        {% if field.help %}
+          <p class="hint">{{ field.help }}</p>
+        {% endif %}
+        <p class="field-error" hidden></p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div id="pesan" class="alert" role="alert" hidden></div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn--primary" {% if not model.ready %}disabled{% endif %}>
+      Analisis sekarang
+    </button>
+    <button type="reset" class="btn btn--ghost">Kosongkan</button>
+    <p class="muted small form-note">
+      Dengan menekan analisis, Anda memahami bahwa hasil ini bukan diagnosis medis.
+    </p>
+  </div>
+</form>
+
+<div id="hasil-sementara" class="result-fallback" hidden></div>
+
+<noscript>
+  <div class="alert alert--warning">
+    JavaScript diaktifkan diperlukan untuk mengirim data ke server.
+  </div>
+</noscript>
+
+<p class="muted small privacy-note">
+  Privasi: kami tidak meminta nama, email, atau nomor identitas. Data disimpan
+  dengan token sesi anonim agar Anda bisa melihat riwayat di perangkat ini.
+</p>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/api.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/detection.js') }}" defer></script>
+{% endblock %}

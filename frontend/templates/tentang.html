@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Tentang Sistem — Somnipathy Lab{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Transparansi</p>
+  <h1>Tentang Somnipathy Lab</h1>
+  <p class="lead">
+    Sistem deteksi awal gangguan tidur yang menggabungkan model klasifikasi
+    Machine Learning dengan rekomendasi berbasis aturan.
+  </p>
+</section>
+
+<section class="card">
+  <h2>Alur kerja</h2>
+  <ol class="flow-list">
+    <li><strong>Input pengguna.</strong> Data durasi tidur, kualitas tidur, aktivitas, dan kondisi tubuh dikirim dari form ke API.</li>
+    <li><strong>Validasi.</strong> Backend memeriksa kelengkapan dan rentang nilai sebelum diproses.</li>
+    <li><strong>Klasifikasi.</strong> Model scikit-learn menghitung probabilitas setiap kelas, lalu memilih yang tertinggi.</li>
+    <li><strong>Rekomendasi.</strong> Mesin aturan mengevaluasi kondisi dan menyusun saran yang relevan.</li>
+    <li><strong>Penyimpanan.</strong> Hasil dan rekomendasi disimpan ke MySQL dengan token sesi anonim.</li>
+  </ol>
+</section>
+
+<section class="grid-2">
+  <article class="card">
+    <h2>Mengapa rekomendasi tidak memakai LLM?</h2>
+    <p class="muted">
+      Rekomendasi kesehatan harus konsisten dan dapat dipertanggungjawabkan.
+      Aturan tertulis menghasilkan keluaran yang sama untuk input yang sama,
+      bisa diuji otomatis, dan setiap saran dapat dilacak ke kode aturannya.
+      Model bahasa besar tidak memberikan jaminan tersebut.
+    </p>
+    <p class="muted">
+      File aturan: <code>rules/recommendation_rules.json</code>
+    </p>
+  </article>
+
+  <article class="card">
+    <h2>Status teknis</h2>
+    <ul class="status-list">
+      <li>
+        <span class="status-dot {{ 'is-ok' if model.ready else 'is-warn' }}"></span>
+        <span>Model klasifikasi</span>
+        <strong>{{ 'Siap' if model.ready else 'Belum tersedia' }}</strong>
+      </li>
+      <li>
+        <span class="status-dot is-ok"></span>
+        <span>Versi skema fitur</span>
+        <strong>{{ schema.version }}</strong>
+      </li>
+      <li>
+        <span class="status-dot is-ok"></span>
+        <span>Bahasa antarmuka</span>
+        <strong>Indonesia</strong>
+      </li>
+    </ul>
+    {% if model.reason %}
+      <p class="alert alert--info small">{{ model.reason }}</p>
+    {% endif %}
+  </article>
+</section>
+
+<section class="card">
+  <h2>Batasan dan etika</h2>
+  <ul class="check-list">
+    <li>Bukan alat diagnosis. Hasil tidak menggantikan pemeriksaan dokter.</li>
+    <li>Kualitas prediksi bergantung pada dataset pelatihan dan kelengkapan data Anda.</li>
+    <li>Kami tidak meminta identitas pribadi; riwayat terikat pada sesi browser.</li>
+    <li>Ambang batas pada aturan masih draft dan perlu ditinjau tenaga kesehatan.</li>
+  </ul>
+</section>
+
+<div class="page-actions">
+  <a class="btn btn--primary" href="{{ url_for('web.detection_page') }}">Mulai deteksi</a>
+</div>
+{% endblock %}

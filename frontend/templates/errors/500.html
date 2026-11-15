@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Terjadi Kesalahan — Somnipathy Lab{% endblock %}
+
+{% block content %}
+<section class="card error-page">
+  <p class="eyebrow">Kesalahan</p>
+  <h1>Maaf, terjadi kesalahan</h1>
+  <p class="muted">
+    {{ message or "Permintaan Anda belum dapat diproses. Silakan coba lagi beberapa saat lagi." }}
+  </p>
+  <div class="page-actions">
+    <a class="btn btn--primary" href="{{ url_for('web.index') }}">Kembali ke beranda</a>
+  </div>
+</section>
+{% endblock %}
